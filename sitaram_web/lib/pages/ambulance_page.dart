@@ -43,8 +43,7 @@ class _AmbulancePageState extends State<AmbulancePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BackgroundContainer(
-        imagePath:
-            'assets/images/cow_feeding_street.jpg', // visually appropriate for ambulance
+        imagePath: 'assets/images/cow_feeding_street.jpg',
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: Center(
           child: Padding(

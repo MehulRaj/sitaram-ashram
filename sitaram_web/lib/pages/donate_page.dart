@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
+import '../widgets/background_container.dart';
 
 class DonatePage extends StatefulWidget {
   const DonatePage({super.key});
@@ -41,17 +42,9 @@ class _DonatePageState extends State<DonatePage> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/calf_barn.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.45),
-              BlendMode.darken,
-            ),
-          ),
-        ),
+      body: BackgroundContainer(
+        imagePath: 'assets/images/calf_barn.jpg',
+        overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: Column(
           children: [
             Expanded(

@@ -74,8 +74,7 @@ class _ServicesPageState extends State<ServicesPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BackgroundContainer(
-        imagePath:
-            'assets/images/cow_statue.jpg', // visually appropriate for services
+        imagePath: 'assets/images/cow_statue.jpg',
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: SingleChildScrollView(
           child: Column(

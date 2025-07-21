@@ -43,8 +43,7 @@ class _TreatmentPageState extends State<TreatmentPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BackgroundContainer(
-        imagePath:
-            'assets/images/calf_barn.jpg', // visually appropriate for treatment
+        imagePath: 'assets/images/calf_barn.jpg',
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
