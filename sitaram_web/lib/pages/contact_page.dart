@@ -15,16 +15,28 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
+  bool _bgReady = false;
+
   @override
   void initState() {
     super.initState();
-    precacheImages(context, [
-      AssetImage('assets/images/cow_calf_field.jpg'),
-    ]);
+    _precacheBg();
+  }
+
+  void _precacheBg() async {
+    await precacheImage(
+        const AssetImage('assets/images/cow_calf_field.jpg'), context);
+    if (mounted) setState(() => _bgReady = true);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_bgReady) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,

@@ -17,16 +17,28 @@ class AmbulancePage extends StatefulWidget {
 }
 
 class _AmbulancePageState extends State<AmbulancePage> {
+  bool _bgReady = false;
+
   @override
   void initState() {
     super.initState();
-    precacheImages(context, [
-      AssetImage('assets/images/cow_feeding_street.jpg'),
-    ]);
+    _precacheBg();
+  }
+
+  void _precacheBg() async {
+    await precacheImage(
+        const AssetImage('assets/images/cow_feeding_street.jpg'), context);
+    if (mounted) setState(() => _bgReady = true);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_bgReady) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,

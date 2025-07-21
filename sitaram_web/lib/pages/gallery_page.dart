@@ -22,9 +22,24 @@ class _GalleryPageState extends State<GalleryPage> {
   @override
   void initState() {
     super.initState();
-    precacheImages(context, [
-      AssetImage('assets/images/herd_sunset.jpg'),
-    ]);
+    final images = [
+      'assets/images/herd_sunset.jpg',
+      'assets/images/cow_closeup.jpg',
+      'assets/images/calf_barn.jpg',
+      'assets/images/buffalo_portrait.jpg',
+      'assets/images/barn_feeding.jpg',
+      'assets/images/cow_calf_field.jpg',
+      'assets/images/cows_resting.jpg',
+      'assets/images/cow_feeding_street.jpg',
+      'assets/images/calf_village.jpg',
+      'assets/images/cow_statue.jpg',
+      'assets/images/dairy_cow.jpg',
+      'assets/images/cows-1.jpg',
+      'assets/images/pexels-cottonbro-4428270.jpg',
+    ];
+    for (final img in images) {
+      precacheImage(AssetImage(img), context);
+    }
   }
 
   @override

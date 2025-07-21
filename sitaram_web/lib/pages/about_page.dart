@@ -16,16 +16,28 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  bool _bgReady = false;
+
   @override
   void initState() {
     super.initState();
-    precacheImages(context, [
-      AssetImage('assets/images/calf_barn.jpg'),
-    ]);
+    _precacheBg();
+  }
+
+  void _precacheBg() async {
+    await precacheImage(
+        const AssetImage('assets/images/calf_barn.jpg'), context);
+    if (mounted) setState(() => _bgReady = true);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_bgReady) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final l10n = AppLocalizations.of(context)!;
     final isMobile = MediaQuery.of(context).size.width < 700;
     final headlineStyle = GoogleFonts.mukta(
