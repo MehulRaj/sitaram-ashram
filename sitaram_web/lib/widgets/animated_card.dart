@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 import 'dart:math' as Math;
 
 class AnimatedCard extends StatefulWidget {
@@ -26,7 +25,7 @@ class _AnimatedCardState extends State<AnimatedCard> {
         curve: Curves.easeOut,
         transform: Matrix4.identity()..scale(_hovering ? 1.03 : 1.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(widget.borderRadius),
           boxShadow: [
             BoxShadow(

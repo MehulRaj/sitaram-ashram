@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/animated_card.dart';
-import 'package:flutter/gestures.dart';
-import '../bloc/locale_bloc.dart';
-import '../widgets/language_switcher.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../utils/url_utils.dart';
-import 'dart:math' as Math;
-import '../widgets/animated_card.dart';
 import '../widgets/background_container.dart';
 import '../widgets/home_footer.dart';
 
@@ -201,9 +193,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/herd_sunset.jpg',
+        image: const AssetImage('assets/images/herd_sunset.jpg'),
         overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: SingleChildScrollView(
           child: Column(
@@ -515,7 +507,7 @@ class _HomeDonateCTA extends StatefulWidget {
 }
 
 class _HomeDonateCTAState extends State<_HomeDonateCTA> {
-  bool _hovered = false;
+  final bool _hovered = false;
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

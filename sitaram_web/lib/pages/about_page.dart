@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
-import '../utils/url_utils.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -16,17 +13,18 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/calf_barn.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/calf_barn.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -55,14 +53,14 @@ class _AboutPageState extends State<AboutPage> {
     );
     final bodyStyle = GoogleFonts.mukta(
       textStyle: TextStyle(
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
         fontWeight: FontWeight.w400,
       ),
     );
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BackgroundContainer(
-        imagePath: 'assets/images/calf_barn.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: SingleChildScrollView(
           child: Column(
@@ -145,7 +143,7 @@ class _AboutPageState extends State<AboutPage> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 color:
-                                    Theme.of(context).colorScheme.onBackground,
+                                    Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,
@@ -185,7 +183,7 @@ class _AboutPageState extends State<AboutPage> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 color:
-                                    Theme.of(context).colorScheme.onBackground,
+                                    Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,
@@ -225,7 +223,7 @@ class _AboutPageState extends State<AboutPage> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 color:
-                                    Theme.of(context).colorScheme.onBackground,
+                                    Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,

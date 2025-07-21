@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../theme/app_theme.dart';
 
 class AnimatedButton extends StatefulWidget {
   final String text;
@@ -28,7 +27,7 @@ class _AnimatedButtonState extends State<AnimatedButton> {
     final isPrimary = widget.primary;
     final bgColor = isPrimary
         ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.background;
+        : Theme.of(context).colorScheme.surface;
     final fgColor = isPrimary
         ? Theme.of(context).colorScheme.onPrimary
         : Theme.of(context).colorScheme.primary;

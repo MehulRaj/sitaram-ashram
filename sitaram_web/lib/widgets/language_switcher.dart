@@ -88,7 +88,7 @@ class LanguageSwitcher extends StatelessWidget {
           width: 140, // Set a fixed width for the dropdown options
         ),
         menuItemStyleData: const MenuItemStyleData(
-          overlayColor: MaterialStatePropertyAll(Colors.transparent),
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
           selectedMenuItemBuilder: null,
         ),
         buttonStyleData: const ButtonStyleData(

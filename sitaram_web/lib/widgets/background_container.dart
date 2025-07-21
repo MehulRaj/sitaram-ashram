@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BackgroundContainer extends StatelessWidget {
-  final String imagePath;
+  final ImageProvider image;
   final Widget child;
   final Color overlayColor;
   final BoxFit fit;
 
   const BackgroundContainer({
     super.key,
-    required this.imagePath,
+    required this.image,
     required this.child,
     this.overlayColor = const Color.fromRGBO(0, 0, 0, 0.45),
     this.fit = BoxFit.cover,
@@ -19,7 +19,7 @@ class BackgroundContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(imagePath),
+          image: image,
           fit: fit,
           colorFilter: ColorFilter.mode(
             overlayColor,

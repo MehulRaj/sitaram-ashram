@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../utils/url_utils.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
@@ -17,17 +15,18 @@ class AmbulancePage extends StatefulWidget {
 }
 
 class _AmbulancePageState extends State<AmbulancePage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/cow_feeding_street.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/cow_feeding_street.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -41,9 +40,9 @@ class _AmbulancePageState extends State<AmbulancePage> {
     }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/cow_feeding_street.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: Center(
           child: Padding(

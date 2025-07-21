@@ -3,13 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:photo_view/photo_view.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
-import '../utils/url_utils.dart';
 
 class GalleryPage extends StatefulWidget {
   const GalleryPage({super.key});
@@ -73,9 +71,9 @@ class _GalleryPageState extends State<GalleryPage> {
       'assets/images/pexels-cottonbro-4428270.jpg',
     ];
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/herd_sunset.jpg',
+        image: const AssetImage('assets/images/herd_sunset.jpg'),
         overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: SingleChildScrollView(
           child: Column(
@@ -226,9 +224,9 @@ class _GalleryPageState extends State<GalleryPage> {
       'assets/images/pexels-cottonbro-4428270.jpg',
     ];
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/herd_sunset.jpg',
+        image: const AssetImage('assets/images/herd_sunset.jpg'),
         overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: LayoutBuilder(
           builder: (context, constraints) {

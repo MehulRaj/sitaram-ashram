@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
-import '../utils/url_utils.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -15,17 +13,18 @@ class ServicesPage extends StatefulWidget {
 }
 
 class _ServicesPageState extends State<ServicesPage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/cow_statue.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/cow_statue.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -52,18 +51,12 @@ class _ServicesPageState extends State<ServicesPage> {
       {
         'icon': Icons.auto_stories,
         'title': l10n.productsTitle,
-        'desc': l10n.productGheeDesc +
-            '\n' +
-            l10n.productDungDesc +
-            '\n' +
-            l10n.productUrineDesc +
-            '\n' +
-            l10n.productCompostDesc,
+        'desc': '${l10n.productGheeDesc}\n${l10n.productDungDesc}\n${l10n.productUrineDesc}\n${l10n.productCompostDesc}',
       },
       {
         'icon': Icons.photo_library,
         'title': l10n.galleryTitle,
-        'desc': l10n.galleryTitle + ': ' + l10n.ourWorkDesc,
+        'desc': '${l10n.galleryTitle}: ${l10n.ourWorkDesc}',
       },
       {
         'icon': Icons.volunteer_activism,
@@ -72,9 +65,9 @@ class _ServicesPageState extends State<ServicesPage> {
       },
     ];
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/cow_statue.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: SingleChildScrollView(
           child: Column(
@@ -183,7 +176,7 @@ class _ServicesPageState extends State<ServicesPage> {
                                       fontWeight: FontWeight.w400,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                     ),
                                     textAlign: TextAlign.center,
                                     beat: hovered,

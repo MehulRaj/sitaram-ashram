@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/url_utils.dart';
 import 'animated_card.dart';
-import 'animated_button.dart';
 
 class HomeFooter extends StatefulWidget {
   const HomeFooter({super.key});
@@ -13,9 +12,9 @@ class HomeFooter extends StatefulWidget {
 }
 
 class _HomeFooterState extends State<HomeFooter> {
-  bool _hoveredEmail = false;
-  bool _hoveredFacebook = false;
-  bool _hoveredInstagram = false;
+  final bool _hoveredEmail = false;
+  final bool _hoveredFacebook = false;
+  final bool _hoveredInstagram = false;
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

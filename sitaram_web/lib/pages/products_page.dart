@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
-import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -52,7 +50,7 @@ class ProductsPage extends StatelessWidget {
       },
     ];
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -171,7 +169,7 @@ class ProductsPage extends StatelessWidget {
       crossAxisCount = 2;
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'pages/home_page.dart';
 import 'pages/about_page.dart';
 import 'pages/ambulance_page.dart';

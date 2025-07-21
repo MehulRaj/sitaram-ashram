@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import '../utils/url_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
-import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
 
@@ -16,17 +13,18 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/cow_calf_field.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/cow_calf_field.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -40,9 +38,9 @@ class _ContactPageState extends State<ContactPage> {
     }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/cow_calf_field.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.35),
         child: Column(
           children: [

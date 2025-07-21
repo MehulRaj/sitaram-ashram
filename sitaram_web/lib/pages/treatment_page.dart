@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
-import '../utils/url_utils.dart';
 
 class TreatmentPage extends StatefulWidget {
   const TreatmentPage({super.key});
@@ -17,17 +15,18 @@ class TreatmentPage extends StatefulWidget {
 }
 
 class _TreatmentPageState extends State<TreatmentPage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/calf_barn.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/calf_barn.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -41,9 +40,9 @@ class _TreatmentPageState extends State<TreatmentPage> {
     }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/calf_barn.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

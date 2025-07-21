@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../utils/url_utils.dart';
-import '../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
@@ -17,17 +15,18 @@ class DonatePage extends StatefulWidget {
 }
 
 class _DonatePageState extends State<DonatePage> {
+  late final AssetImage _bgImage;
   bool _bgReady = false;
 
   @override
   void initState() {
     super.initState();
+    _bgImage = const AssetImage('assets/images/calf_barn.jpg');
     _precacheBg();
   }
 
   void _precacheBg() async {
-    await precacheImage(
-        const AssetImage('assets/images/calf_barn.jpg'), context);
+    await precacheImage(_bgImage, context);
     if (mounted) setState(() => _bgReady = true);
   }
 
@@ -41,9 +40,9 @@ class _DonatePageState extends State<DonatePage> {
     }
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BackgroundContainer(
-        imagePath: 'assets/images/calf_barn.jpg',
+        image: _bgImage,
         overlayColor: Color.fromRGBO(0, 0, 0, 0.45),
         child: Column(
           children: [
@@ -84,7 +83,7 @@ class _DonatePageState extends State<DonatePage> {
                                     fontWeight: FontWeight.w400,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onBackground,
+                                        .onSurface,
                                   ),
                                   textAlign: TextAlign.center,
                                   beat: hovered,

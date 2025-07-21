@@ -202,13 +202,13 @@ class AppNavDrawer extends StatelessWidget {
       {'label': l10n.contactTitle, 'route': '/contact'},
     ];
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -229,7 +229,7 @@ class AppNavDrawer extends StatelessWidget {
                     fontSize: 18,
                     color: currentRoute == item['route']
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onBackground,
+                        : Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 onTap: currentRoute == item['route']
