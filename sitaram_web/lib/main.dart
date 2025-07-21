@@ -1,0 +1,169 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'pages/home_page.dart';
+import 'pages/about_page.dart';
+import 'pages/ambulance_page.dart';
+import 'pages/treatment_page.dart';
+import 'pages/products_page.dart';
+import 'pages/gallery_page.dart';
+import 'pages/donate_page.dart';
+import 'pages/contact_page.dart';
+import 'pages/services_page.dart';
+import 'widgets/app_navbar.dart';
+import 'theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/locale_bloc.dart';
+import 'utils/url_utils.dart';
+import 'package:animations/animations.dart';
+
+void main() {
+  runApp(
+    BlocProvider(
+      create: (_) => LocaleBloc(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  Future<void> _precacheAllImages(BuildContext context) async {
+    await precacheImages(context, [
+      AssetImage('assets/images/herd_sunset.jpg'),
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _precacheAllImages(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.black,
+            ),
+            home: Scaffold(
+              backgroundColor: Colors.black,
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+        return BlocBuilder<LocaleBloc, LocaleState>(
+          builder: (context, localeState) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: appTheme,
+              supportedLocales: const [
+                Locale('en'),
+                Locale('hi'),
+                Locale('gu'),
+              ],
+              locale: localeState.locale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (locale == null) return supportedLocales.first;
+                for (var supportedLocale in supportedLocales) {
+                  if (supportedLocale.languageCode == locale.languageCode) {
+                    return supportedLocale;
+                  }
+                }
+                return supportedLocales.first;
+              },
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context)!.appTitle,
+              home: _SectionalRoot(),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _SectionalRoot extends StatefulWidget {
+  @override
+  State<_SectionalRoot> createState() => _SectionalRootState();
+}
+
+class _SectionalRootState extends State<_SectionalRoot> {
+  String _currentRoute = '/';
+
+  Widget _getPage(String route) {
+    switch (route) {
+      case '/about':
+        return const AboutPage();
+      case '/ambulance':
+        return const AmbulancePage();
+      case '/treatment':
+        return const TreatmentPage();
+      case '/products':
+        return const ProductsPage();
+      case '/gallery':
+        return const GalleryPage();
+      case '/donate':
+        return const DonatePage();
+      case '/contact':
+        return const ContactPage();
+      case '/services':
+        return const ServicesPage();
+      case '/':
+      default:
+        return const HomePage();
+    }
+  }
+
+  void _onNav(String route) {
+    if (route != _currentRoute) {
+      setState(() {
+        _currentRoute = route;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localeState = context.watch<LocaleBloc>().state;
+    return Scaffold(
+      appBar: AppNavbar(
+        onNav: _onNav,
+        currentRoute: _currentRoute,
+        currentLocale: localeState.locale,
+        onLocaleChanged: (locale) =>
+            context.read<LocaleBloc>().add(ChangeLocale(locale)),
+      ),
+      endDrawer: AppNavDrawer(
+        onNav: _onNav,
+        currentRoute: _currentRoute,
+        currentLocale: localeState.locale,
+        onLocaleChanged: (locale) =>
+            context.read<LocaleBloc>().add(ChangeLocale(locale)),
+      ),
+      body: PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 600),
+        reverse: false,
+        transitionBuilder: (child, animation, secondaryAnimation) =>
+            FadeThroughTransition(
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        ),
+        child: KeyedSubtree(
+          key: ValueKey(_currentRoute),
+          child: _getPage(_currentRoute),
+        ),
+      ),
+    );
+  }
+}
