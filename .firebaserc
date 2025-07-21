@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "sitaram-ashram",
+    "staging": "sitaram-ashram"
+  },
+  "targets": {},
+  "etags": {}
+}
