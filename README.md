@@ -35,4 +35,4 @@ flutter run -d chrome
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
-[MIT](LICENSE) 
+[MIT](LICENSE)
