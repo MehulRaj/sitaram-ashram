@@ -102,24 +102,24 @@ class _SectionalRootState extends State<_SectionalRoot> {
   Widget _getPage(String route) {
     switch (route) {
       case '/about':
-        return const AboutPage();
+        return AboutPage(onNav: _onNav);
       case '/ambulance':
-        return const AmbulancePage();
+        return AmbulancePage(onNav: _onNav);
       case '/treatment':
-        return const TreatmentPage();
+        return TreatmentPage(onNav: _onNav);
       case '/products':
-        return const ProductsPage();
+        return ProductsPage(onNav: _onNav);
       case '/gallery':
-        return const GalleryPage();
+        return GalleryPage(onNav: _onNav);
       case '/donate':
-        return const DonatePage();
+        return DonatePage(onNav: _onNav);
       case '/contact':
-        return const ContactPage();
+        return ContactPage(onNav: _onNav);
       case '/services':
-        return const ServicesPage();
+        return ServicesPage(onNav: _onNav);
       case '/':
       default:
-        return const HomePage();
+        return HomePage(onNav: _onNav);
     }
   }
 
@@ -134,33 +134,44 @@ class _SectionalRootState extends State<_SectionalRoot> {
   @override
   Widget build(BuildContext context) {
     final localeState = context.watch<LocaleBloc>().state;
-    return Scaffold(
-      appBar: AppNavbar(
-        onNav: _onNav,
-        currentRoute: _currentRoute,
-        currentLocale: localeState.locale,
-        onLocaleChanged: (locale) =>
-            context.read<LocaleBloc>().add(ChangeLocale(locale)),
-      ),
-      endDrawer: AppNavDrawer(
-        onNav: _onNav,
-        currentRoute: _currentRoute,
-        currentLocale: localeState.locale,
-        onLocaleChanged: (locale) =>
-            context.read<LocaleBloc>().add(ChangeLocale(locale)),
-      ),
-      body: PageTransitionSwitcher(
-        duration: const Duration(milliseconds: 600),
-        reverse: false,
-        transitionBuilder: (child, animation, secondaryAnimation) =>
-            FadeThroughTransition(
-          animation: animation,
-          secondaryAnimation: secondaryAnimation,
-          child: child,
+    return WillPopScope(
+      onWillPop: () async {
+        if (_currentRoute != '/') {
+          setState(() {
+            _currentRoute = '/';
+          });
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppNavbar(
+          onNav: _onNav,
+          currentRoute: _currentRoute,
+          currentLocale: localeState.locale,
+          onLocaleChanged: (locale) =>
+              context.read<LocaleBloc>().add(ChangeLocale(locale)),
         ),
-        child: KeyedSubtree(
-          key: ValueKey(_currentRoute),
-          child: _getPage(_currentRoute),
+        endDrawer: AppNavDrawer(
+          onNav: _onNav,
+          currentRoute: _currentRoute,
+          currentLocale: localeState.locale,
+          onLocaleChanged: (locale) =>
+              context.read<LocaleBloc>().add(ChangeLocale(locale)),
+        ),
+        body: PageTransitionSwitcher(
+          duration: const Duration(milliseconds: 600),
+          reverse: false,
+          transitionBuilder: (child, animation, secondaryAnimation) =>
+              FadeThroughTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          ),
+          child: KeyedSubtree(
+            key: ValueKey(_currentRoute),
+            child: _getPage(_currentRoute),
+          ),
         ),
       ),
     );

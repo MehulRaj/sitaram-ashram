@@ -7,6 +7,7 @@ import '../widgets/animated_card.dart';
 import '../utils/url_utils.dart';
 import '../widgets/background_container.dart';
 import '../widgets/home_footer.dart';
+import '../utils/responsive_utils.dart';
 
 class ZigZagSection extends StatefulWidget {
   final String imageUrl;
@@ -46,8 +47,16 @@ class _ZigZagSectionState extends State<ZigZagSection> {
       borderRadius: BorderRadius.circular(20),
       child: Image.network(
         widget.imageUrl,
-        width: widget.isMobile ? double.infinity : 680, // 2x width
-        height: widget.isMobile ? 400 : 440, // 2x height
+        width: widget.isMobile
+            ? double.infinity
+            : ResponsiveUtils.isLargeScreen(context)
+                ? 680
+                : 440,
+        height: widget.isMobile
+            ? 200
+            : ResponsiveUtils.isLargeScreen(context)
+                ? 440
+                : 320,
         fit: BoxFit.cover,
         errorBuilder: (c, e, s) => Container(
           color: Theme.of(context).colorScheme.surface,
@@ -76,8 +85,10 @@ class _ZigZagSectionState extends State<ZigZagSection> {
           duration: const Duration(milliseconds: 200),
           style: (GoogleFonts.mukta(
             fontSize: _hovering
-                ? (widget.isMobile ? 30 : 38)
-                : (widget.isMobile ? 26 : 32),
+                ? ResponsiveUtils.fontSize(context,
+                    small: 18, medium: 26, large: 38)
+                : ResponsiveUtils.fontSize(context,
+                    small: 16, medium: 22, large: 32),
             fontWeight: FontWeight.w700,
             color: Theme.of(context).colorScheme.primary,
           )).copyWith(
@@ -89,7 +100,8 @@ class _ZigZagSectionState extends State<ZigZagSection> {
         Text(
           widget.description,
           style: GoogleFonts.mukta(
-            fontSize: widget.isMobile ? 16 : 20,
+            fontSize: ResponsiveUtils.fontSize(context,
+                small: 12, medium: 16, large: 20),
             color: Theme.of(context).colorScheme.secondary,
           ),
           textAlign: widget.isMobile
@@ -144,8 +156,8 @@ class _ZigZagSectionState extends State<ZigZagSection> {
           );
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: widget.isMobile ? 16 : 32,
-        vertical: widget.isMobile ? 16 : 32,
+        horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+        vertical: ResponsiveUtils.isSmallScreen(context) ? 16 : 32,
       ),
       child: MouseRegion(
         onEnter: (_) => setState(() => _hovering = true),
@@ -168,25 +180,36 @@ class _ZigZagSectionState extends State<ZigZagSection> {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final void Function(String route)? onNav;
+  const HomePage({super.key, this.onNav});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _didPrecache = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      precacheImages(context, [
+        AssetImage('assets/images/herd_sunset.jpg'),
+        AssetImage('assets/images/cow_statue.jpg'),
+        AssetImage('assets/images/calf_barn.jpg'),
+        AssetImage('assets/images/cows_resting.jpg'),
+        AssetImage('assets/images/cow_calf_field.jpg'),
+        AssetImage('assets/images/cows-1.jpg'),
+        // Add more as needed
+      ]);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    precacheImages(context, [
-      AssetImage('assets/images/herd_sunset.jpg'),
-      AssetImage('assets/images/cow_statue.jpg'),
-      AssetImage('assets/images/calf_barn.jpg'),
-      AssetImage('assets/images/cows_resting.jpg'),
-      AssetImage('assets/images/cow_calf_field.jpg'),
-      AssetImage('assets/images/cows-1.jpg'),
-      // Add more as needed
-    ]);
   }
 
   @override
@@ -206,7 +229,7 @@ class _HomePageState extends State<HomePage> {
               // 2. Mission/Intro Section
               _HomeMissionSection(),
               // 3. Highlights Grid
-              _HomeHighlightsGrid(),
+              _HomeHighlightsGrid(onNav: widget.onNav),
               // 4. Donate Call-to-Action
               _HomeDonateCTA(),
               // 6. Creative Footer
@@ -225,7 +248,10 @@ class _HomeHeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveUtils.isSmallScreen(context) ? 32 : 80,
+        horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+      ),
       // decoration: BoxDecoration(
       //   image: DecorationImage(
       //     image: AssetImage('assets/images/herd_sunset.jpg'),
@@ -245,7 +271,8 @@ class _HomeHeroSection extends StatelessWidget {
               HeartbeatText(
                 text: l10n.homeTitle,
                 style: GoogleFonts.mukta(
-                  fontSize: 54,
+                  fontSize: ResponsiveUtils.fontSize(context,
+                      small: 24, medium: 36, large: 54),
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.5,
                   color: Colors.white,
@@ -261,11 +288,13 @@ class _HomeHeroSection extends StatelessWidget {
                 duration: const Duration(milliseconds: 3200),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
+              SizedBox(
+                  height: ResponsiveUtils.isSmallScreen(context) ? 12 : 32),
               HeartbeatText(
                 text: l10n.homeMissionCreative,
                 style: GoogleFonts.mukta(
-                  fontSize: 28,
+                  fontSize: ResponsiveUtils.fontSize(context,
+                      small: 14, medium: 18, large: 28),
                   fontWeight: FontWeight.w500,
                   color: Colors.white.withOpacity(0.92),
                   shadows: [
@@ -280,7 +309,8 @@ class _HomeHeroSection extends StatelessWidget {
                 duration: const Duration(milliseconds: 3200),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 44),
+              SizedBox(
+                  height: ResponsiveUtils.isSmallScreen(context) ? 16 : 44),
               HoverBeat(
                 builder: (context, btnHovered) => Container(
                   decoration: BoxDecoration(
@@ -352,26 +382,34 @@ class _HomeMissionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveUtils.isSmallScreen(context) ? 18 : 48,
+        horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.stars, size: 56, color: Colors.white),
-          const SizedBox(height: 18),
+          Icon(Icons.stars,
+              size: ResponsiveUtils.fontSize(context,
+                  small: 32, medium: 40, large: 56),
+              color: Colors.white),
+          SizedBox(height: ResponsiveUtils.isSmallScreen(context) ? 8 : 18),
           Text(
             l10n.ourMissionTitle,
             style: GoogleFonts.mukta(
-              fontSize: 36,
+              fontSize: ResponsiveUtils.fontSize(context,
+                  small: 18, medium: 24, large: 36),
               fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: ResponsiveUtils.isSmallScreen(context) ? 8 : 18),
           Text(
             l10n.ourMissionCreative,
             style: GoogleFonts.mukta(
-              fontSize: 20,
+              fontSize: ResponsiveUtils.fontSize(context,
+                  small: 12, medium: 16, large: 20),
               fontWeight: FontWeight.w500,
               color: Colors.white70,
             ),
@@ -385,6 +423,8 @@ class _HomeMissionSection extends StatelessWidget {
 
 // 3. Highlights Grid (About Us more creative, beautiful, centered, descriptive)
 class _HomeHighlightsGrid extends StatelessWidget {
+  final void Function(String route)? onNav;
+  const _HomeHighlightsGrid({this.onNav});
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -421,7 +461,10 @@ class _HomeHighlightsGrid extends StatelessWidget {
       },
     ];
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveUtils.isSmallScreen(context) ? 16 : 32,
+        horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           int crossAxisCount = constraints.maxWidth > 900
@@ -433,14 +476,15 @@ class _HomeHighlightsGrid extends StatelessWidget {
             crossAxisCount: crossAxisCount,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 32,
-            crossAxisSpacing: 32,
+            mainAxisSpacing: ResponsiveUtils.isSmallScreen(context) ? 12 : 32,
+            crossAxisSpacing: ResponsiveUtils.isSmallScreen(context) ? 12 : 32,
             childAspectRatio: 1.7,
             children: highlights.map((h) {
               return _HighlightCard(
                 icon: h['icon'] as IconData,
                 label: h['label'] as String,
                 route: h['route'] as String,
+                onNav: onNav,
               );
             }).toList(),
           );
@@ -454,36 +498,46 @@ class _HighlightCard extends StatelessWidget {
   final IconData icon;
   final String label;
   final String route;
+  final void Function(String route)? onNav;
   const _HighlightCard({
     required this.icon,
     required this.label,
     required this.route,
+    this.onNav,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return HoverBeat(
-      builder: (context, hovered) => InkWell(
-        borderRadius: BorderRadius.circular(24),
-        onTap: () => Navigator.of(context).pushNamed(route),
+      builder: (context, hovered) => GestureDetector(
+        onTap: () => onNav != null
+            ? onNav!(route)
+            : Navigator.of(context).pushNamed(route),
         child: AnimatedCard(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            padding: EdgeInsets.symmetric(
+              vertical: ResponsiveUtils.isSmallScreen(context) ? 16 : 32,
+              horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 HeartbeatIcon(
                   icon: Icon(icon,
-                      size: 48, color: Theme.of(context).colorScheme.primary),
+                      size: ResponsiveUtils.fontSize(context,
+                          small: 28, medium: 36, large: 48),
+                      color: Theme.of(context).colorScheme.primary),
                   beat: hovered,
                   duration: const Duration(milliseconds: 3200),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(
+                    height: ResponsiveUtils.isSmallScreen(context) ? 8 : 18),
                 HeartbeatText(
                   text: label,
                   style: GoogleFonts.mukta(
-                    fontSize: 22,
+                    fontSize: ResponsiveUtils.fontSize(context,
+                        small: 14, medium: 18, large: 22),
                     fontWeight: FontWeight.w600,
                   ),
                   beat: hovered,
@@ -512,7 +566,10 @@ class _HomeDonateCTAState extends State<_HomeDonateCTA> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveUtils.isSmallScreen(context) ? 20 : 40,
+        horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+      ),
       child: HoverBeat(
         builder: (context, hovered) => Container(
           decoration: BoxDecoration(
@@ -524,19 +581,27 @@ class _HomeDonateCTAState extends State<_HomeDonateCTA> {
             borderRadius: BorderRadius.circular(32),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
+            padding: EdgeInsets.symmetric(
+              vertical: ResponsiveUtils.isSmallScreen(context) ? 18 : 36,
+              horizontal: ResponsiveUtils.isSmallScreen(context) ? 12 : 32,
+            ),
             child: Column(
               children: [
                 HeartbeatIcon(
-                  icon: Icon(Icons.favorite, size: 48, color: Colors.white),
+                  icon: Icon(Icons.favorite,
+                      size: ResponsiveUtils.fontSize(context,
+                          small: 28, medium: 36, large: 48),
+                      color: Colors.white),
                   beat: hovered,
                   duration: const Duration(milliseconds: 3200),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(
+                    height: ResponsiveUtils.isSmallScreen(context) ? 8 : 18),
                 HeartbeatText(
                   text: l10n.donateTitle,
                   style: GoogleFonts.mukta(
-                    fontSize: 32,
+                    fontSize: ResponsiveUtils.fontSize(context,
+                        small: 18, medium: 24, large: 32),
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
@@ -544,18 +609,21 @@ class _HomeDonateCTAState extends State<_HomeDonateCTA> {
                   textAlign: TextAlign.center,
                   duration: const Duration(milliseconds: 3200),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(
+                    height: ResponsiveUtils.isSmallScreen(context) ? 8 : 18),
                 HeartbeatText(
                   text: l10n.donateDescCreative,
                   style: GoogleFonts.mukta(
-                    fontSize: 20,
+                    fontSize: ResponsiveUtils.fontSize(context,
+                        small: 12, medium: 16, large: 20),
                     color: Colors.white70,
                   ),
                   beat: hovered,
                   textAlign: TextAlign.center,
                   duration: const Duration(milliseconds: 3200),
                 ),
-                const SizedBox(height: 28),
+                SizedBox(
+                    height: ResponsiveUtils.isSmallScreen(context) ? 12 : 28),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.005),

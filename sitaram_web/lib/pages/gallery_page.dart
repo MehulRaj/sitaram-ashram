@@ -8,35 +8,42 @@ import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
+import '../utils/responsive_utils.dart';
 
 class GalleryPage extends StatefulWidget {
-  const GalleryPage({super.key});
+  final void Function(String route)? onNav;
+  const GalleryPage({super.key, this.onNav});
 
   @override
   State<GalleryPage> createState() => _GalleryPageState();
 }
 
 class _GalleryPageState extends State<GalleryPage> {
+  bool _didPrecache = false;
+
   @override
-  void initState() {
-    super.initState();
-    final images = [
-      'assets/images/herd_sunset.jpg',
-      'assets/images/cow_closeup.jpg',
-      'assets/images/calf_barn.jpg',
-      'assets/images/buffalo_portrait.jpg',
-      'assets/images/barn_feeding.jpg',
-      'assets/images/cow_calf_field.jpg',
-      'assets/images/cows_resting.jpg',
-      'assets/images/cow_feeding_street.jpg',
-      'assets/images/calf_village.jpg',
-      'assets/images/cow_statue.jpg',
-      'assets/images/dairy_cow.jpg',
-      'assets/images/cows-1.jpg',
-      'assets/images/pexels-cottonbro-4428270.jpg',
-    ];
-    for (final img in images) {
-      precacheImage(AssetImage(img), context);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      final images = [
+        'assets/images/herd_sunset.jpg',
+        'assets/images/cow_closeup.jpg',
+        'assets/images/calf_barn.jpg',
+        'assets/images/buffalo_portrait.jpg',
+        'assets/images/barn_feeding.jpg',
+        'assets/images/cow_calf_field.jpg',
+        'assets/images/cows_resting.jpg',
+        'assets/images/cow_feeding.jpg',
+        'assets/images/calf_village.jpg',
+        'assets/images/cow_statue.jpg',
+        'assets/images/dairy_cow.jpg',
+        'assets/images/cows-1.jpg',
+        'assets/images/pexels-cottonbro.jpg',
+      ];
+      for (final img in images) {
+        precacheImage(AssetImage(img), context);
+      }
     }
   }
 
@@ -63,12 +70,12 @@ class _GalleryPageState extends State<GalleryPage> {
       'assets/images/barn_feeding.jpg',
       'assets/images/cow_calf_field.jpg',
       'assets/images/cows_resting.jpg',
-      'assets/images/cow_feeding_street.jpg',
+      'assets/images/cow_feeding.jpg',
       'assets/images/calf_village.jpg',
       'assets/images/cow_statue.jpg',
       'assets/images/dairy_cow.jpg',
       'assets/images/cows-1.jpg',
-      'assets/images/pexels-cottonbro-4428270.jpg',
+      'assets/images/pexels-cottonbro.jpg',
     ];
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -80,13 +87,15 @@ class _GalleryPageState extends State<GalleryPage> {
             children: [
               const SizedBox(height: 32),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 36, horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                    vertical: ResponsiveUtils.isSmallScreen(context) ? 18 : 36,
+                    horizontal: ResponsiveUtils.cardHorizontalPadding(context)),
                 child: HoverBeat(
                   builder: (context, hovered) => HeartbeatText(
                     text: l10n.galleryTitle,
                     style: GoogleFonts.mukta(
-                      fontSize: 32,
+                      fontSize: ResponsiveUtils.fontSize(context,
+                          small: 18, medium: 24, large: 32),
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
@@ -144,8 +153,11 @@ class _GalleryPageState extends State<GalleryPage> {
                     borderRadius: BorderRadius.circular(32),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 36, horizontal: 32),
+                    padding: EdgeInsets.symmetric(
+                        vertical:
+                            ResponsiveUtils.isSmallScreen(context) ? 18 : 36,
+                        horizontal:
+                            ResponsiveUtils.isSmallScreen(context) ? 12 : 32),
                     child: Column(
                       children: [
                         HeartbeatIcon(
@@ -158,7 +170,8 @@ class _GalleryPageState extends State<GalleryPage> {
                         HeartbeatText(
                           text: l10n.donateTitle,
                           style: GoogleFonts.mukta(
-                            fontSize: 32,
+                            fontSize: ResponsiveUtils.fontSize(context,
+                                small: 18, medium: 24, large: 32),
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -170,7 +183,8 @@ class _GalleryPageState extends State<GalleryPage> {
                         HeartbeatText(
                           text: l10n.donateDescCreative,
                           style: GoogleFonts.mukta(
-                            fontSize: 20,
+                            fontSize: ResponsiveUtils.fontSize(context,
+                                small: 16, medium: 20, large: 20),
                             color: Colors.white70,
                           ),
                           beat: hovered,
@@ -185,8 +199,9 @@ class _GalleryPageState extends State<GalleryPage> {
                           ),
                           child: AnimatedButton(
                             text: l10n.donatePaypal,
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/donate'),
+                            onPressed: () => widget.onNav != null
+                                ? widget.onNav!('/donate')
+                                : Navigator.of(context).pushNamed('/donate'),
                             primary: true,
                             icon: const Icon(Icons.account_balance_wallet,
                                 color: Colors.white),
@@ -216,12 +231,12 @@ class _GalleryPageState extends State<GalleryPage> {
       'assets/images/barn_feeding.jpg',
       'assets/images/cow_calf_field.jpg',
       'assets/images/cows_resting.jpg',
-      'assets/images/cow_feeding_street.jpg',
+      'assets/images/cow_feeding.jpg',
       'assets/images/calf_village.jpg',
       'assets/images/cow_statue.jpg',
       'assets/images/dairy_cow.jpg',
       'assets/images/cows-1.jpg',
-      'assets/images/pexels-cottonbro-4428270.jpg',
+      'assets/images/pexels-cottonbro.jpg',
     ];
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -306,8 +321,13 @@ class _GalleryPageState extends State<GalleryPage> {
                           borderRadius: BorderRadius.circular(32),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 36, horizontal: 32),
+                          padding: EdgeInsets.symmetric(
+                              vertical: ResponsiveUtils.isSmallScreen(context)
+                                  ? 18
+                                  : 36,
+                              horizontal: ResponsiveUtils.isSmallScreen(context)
+                                  ? 12
+                                  : 32),
                           child: Column(
                             children: [
                               HeartbeatIcon(
@@ -320,7 +340,8 @@ class _GalleryPageState extends State<GalleryPage> {
                               HeartbeatText(
                                 text: l10n.donateTitle,
                                 style: GoogleFonts.mukta(
-                                  fontSize: 32,
+                                  fontSize: ResponsiveUtils.fontSize(context,
+                                      small: 18, medium: 24, large: 32),
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
@@ -332,7 +353,8 @@ class _GalleryPageState extends State<GalleryPage> {
                               HeartbeatText(
                                 text: l10n.donateDescCreative,
                                 style: GoogleFonts.mukta(
-                                  fontSize: 20,
+                                  fontSize: ResponsiveUtils.fontSize(context,
+                                      small: 16, medium: 20, large: 20),
                                   color: Colors.white70,
                                 ),
                                 beat: hovered,
@@ -347,8 +369,10 @@ class _GalleryPageState extends State<GalleryPage> {
                                 ),
                                 child: AnimatedButton(
                                   text: l10n.donatePaypal,
-                                  onPressed: () => Navigator.of(context)
-                                      .pushNamed('/donate'),
+                                  onPressed: () => widget.onNav != null
+                                      ? widget.onNav!('/donate')
+                                      : Navigator.of(context)
+                                          .pushNamed('/donate'),
                                   primary: true,
                                   icon: const Icon(Icons.account_balance_wallet,
                                       color: Colors.white),

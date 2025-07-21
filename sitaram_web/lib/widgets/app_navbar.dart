@@ -49,13 +49,16 @@ class AppNavbar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Colors.transparent,
             elevation: 0,
             iconTheme: const IconThemeData(color: Colors.white),
-            title: Text(
-              l10n.appTitle,
-              style: GoogleFonts.mukta(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                  color: Colors.white,
+            title: GestureDetector(
+              onTap: () => onNav('/'),
+              child: Text(
+                l10n.appTitle,
+                style: GoogleFonts.mukta(
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

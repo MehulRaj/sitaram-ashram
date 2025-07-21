@@ -6,9 +6,11 @@ import '../widgets/animated_card.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
+import '../utils/responsive_utils.dart';
 
 class TreatmentPage extends StatefulWidget {
-  const TreatmentPage({super.key});
+  final void Function(String route)? onNav;
+  const TreatmentPage({super.key, this.onNav});
 
   @override
   State<TreatmentPage> createState() => _TreatmentPageState();
@@ -17,17 +19,23 @@ class TreatmentPage extends StatefulWidget {
 class _TreatmentPageState extends State<TreatmentPage> {
   late final AssetImage _bgImage;
   bool _bgReady = false;
+  bool _didPrecache = false;
 
   @override
   void initState() {
     super.initState();
     _bgImage = const AssetImage('assets/images/calf_barn.jpg');
-    _precacheBg();
   }
 
-  void _precacheBg() async {
-    await precacheImage(_bgImage, context);
-    if (mounted) setState(() => _bgReady = true);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      precacheImage(_bgImage, context).then((_) {
+        if (mounted) setState(() => _bgReady = true);
+      });
+    }
   }
 
   @override
@@ -50,8 +58,11 @@ class _TreatmentPageState extends State<TreatmentPage> {
             Expanded(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0, vertical: 48.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          ResponsiveUtils.cardHorizontalPadding(context),
+                      vertical:
+                          ResponsiveUtils.isSmallScreen(context) ? 24 : 48),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

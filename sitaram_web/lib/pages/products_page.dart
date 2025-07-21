@@ -4,9 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_card.dart';
 import '../widgets/home_footer.dart';
+import '../utils/responsive_utils.dart';
 
 class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
+  final void Function(String route)? onNav;
+  const ProductsPage({super.key, this.onNav});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,9 @@ class ProductsPage extends StatelessWidget {
                                 p['img']!,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
-                                height: 120,
+                                height: ResponsiveUtils.isSmallScreen(context)
+                                    ? 80
+                                    : 120,
                                 errorBuilder: (c, e, s) => Container(
                                   color: Theme.of(context).colorScheme.surface,
                                   child: const Icon(Icons.image,
@@ -96,7 +100,8 @@ class ProductsPage extends StatelessWidget {
                               builder: (context, hovered) => HeartbeatText(
                                 text: p['name']!,
                                 style: GoogleFonts.mukta(
-                                  fontSize: 22,
+                                  fontSize: ResponsiveUtils.fontSize(context,
+                                      small: 16, medium: 18, large: 22),
                                   fontWeight: FontWeight.w700,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -108,13 +113,11 @@ class ProductsPage extends StatelessWidget {
                             Text(
                               p['desc']!,
                               style: GoogleFonts.mukta(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                                fontSize: ResponsiveUtils.fontSize(context,
+                                    small: 12, medium: 14, large: 16),
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               textAlign: TextAlign.center,
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),

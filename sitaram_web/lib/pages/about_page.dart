@@ -4,9 +4,11 @@ import '../widgets/animated_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
+import '../utils/responsive_utils.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({super.key});
+  final void Function(String route)? onNav;
+  const AboutPage({super.key, this.onNav});
 
   @override
   State<AboutPage> createState() => _AboutPageState();
@@ -15,17 +17,23 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   late final AssetImage _bgImage;
   bool _bgReady = false;
+  bool _didPrecache = false;
 
   @override
   void initState() {
     super.initState();
     _bgImage = const AssetImage('assets/images/calf_barn.jpg');
-    _precacheBg();
   }
 
-  void _precacheBg() async {
-    await precacheImage(_bgImage, context);
-    if (mounted) setState(() => _bgReady = true);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      precacheImage(_bgImage, context).then((_) {
+        if (mounted) setState(() => _bgReady = true);
+      });
+    }
   }
 
   @override
@@ -69,8 +77,8 @@ class _AboutPageState extends State<AboutPage> {
               // Hero Section with 3D animation
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.1,
-                    vertical: 48),
+                    horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+                    vertical: ResponsiveUtils.isSmallScreen(context) ? 24 : 48),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -78,7 +86,8 @@ class _AboutPageState extends State<AboutPage> {
                       builder: (context, hovered) => HeartbeatText(
                         text: l10n.aboutTitle,
                         style: headlineStyle.copyWith(
-                          fontSize: 44,
+                          fontSize: ResponsiveUtils.fontSize(context,
+                              small: 28, medium: 36, large: 44),
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -92,7 +101,8 @@ class _AboutPageState extends State<AboutPage> {
                       builder: (context, hovered) => HeartbeatText(
                         text: l10n.aboutDetailedCreative,
                         style: subheadStyle.copyWith(
-                          fontSize: 22,
+                          fontSize: ResponsiveUtils.fontSize(context,
+                              small: 14, medium: 18, large: 22),
                           color: Colors.white70,
                         ),
                         textAlign: TextAlign.center,
@@ -106,8 +116,8 @@ class _AboutPageState extends State<AboutPage> {
               // Animated Cards for Story, Mission, Why Support
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.1,
-                    vertical: 32),
+                    horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+                    vertical: ResponsiveUtils.isSmallScreen(context) ? 16 : 32),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 32,
@@ -128,7 +138,8 @@ class _AboutPageState extends State<AboutPage> {
                             HeartbeatText(
                               text: l10n.ourStoryTitle,
                               style: GoogleFonts.mukta(
-                                fontSize: 24,
+                                fontSize: ResponsiveUtils.fontSize(context,
+                                    small: 16, medium: 20, large: 24),
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -142,8 +153,7 @@ class _AboutPageState extends State<AboutPage> {
                               style: GoogleFonts.mukta(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,
@@ -168,7 +178,8 @@ class _AboutPageState extends State<AboutPage> {
                             HeartbeatText(
                               text: l10n.ourMissionTitle,
                               style: GoogleFonts.mukta(
-                                fontSize: 24,
+                                fontSize: ResponsiveUtils.fontSize(context,
+                                    small: 16, medium: 20, large: 24),
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -182,8 +193,7 @@ class _AboutPageState extends State<AboutPage> {
                               style: GoogleFonts.mukta(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,
@@ -208,7 +218,8 @@ class _AboutPageState extends State<AboutPage> {
                             HeartbeatText(
                               text: l10n.whySupportTitle,
                               style: GoogleFonts.mukta(
-                                fontSize: 24,
+                                fontSize: ResponsiveUtils.fontSize(context,
+                                    small: 16, medium: 20, large: 24),
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -222,8 +233,7 @@ class _AboutPageState extends State<AboutPage> {
                               style: GoogleFonts.mukta(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
-                                color:
-                                    Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                               beat: hovered,

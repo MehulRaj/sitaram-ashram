@@ -6,9 +6,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/animated_button.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
+import '../utils/responsive_utils.dart';
 
 class AmbulancePage extends StatefulWidget {
-  const AmbulancePage({super.key});
+  final void Function(String route)? onNav;
+  const AmbulancePage({super.key, this.onNav});
 
   @override
   State<AmbulancePage> createState() => _AmbulancePageState();
@@ -17,17 +19,23 @@ class AmbulancePage extends StatefulWidget {
 class _AmbulancePageState extends State<AmbulancePage> {
   late final AssetImage _bgImage;
   bool _bgReady = false;
+  bool _didPrecache = false;
 
   @override
   void initState() {
     super.initState();
-    _bgImage = const AssetImage('assets/images/cow_feeding_street.jpg');
-    _precacheBg();
+    _bgImage = const AssetImage('assets/images/cow_feeding.jpg');
   }
 
-  void _precacheBg() async {
-    await precacheImage(_bgImage, context);
-    if (mounted) setState(() => _bgReady = true);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      precacheImage(_bgImage, context).then((_) {
+        if (mounted) setState(() => _bgReady = true);
+      });
+    }
   }
 
   @override
@@ -46,8 +54,9 @@ class _AmbulancePageState extends State<AmbulancePage> {
         overlayColor: Color.fromRGBO(0, 0, 0, 0.38),
         child: Center(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: ResponsiveUtils.cardHorizontalPadding(context),
+                vertical: ResponsiveUtils.isSmallScreen(context) ? 24 : 48),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -77,7 +86,8 @@ class _AmbulancePageState extends State<AmbulancePage> {
                       child: Text(
                         l10n.ambulanceTitle,
                         style: GoogleFonts.mukta(
-                          fontSize: 36,
+                          fontSize: ResponsiveUtils.fontSize(context,
+                              small: 22, medium: 28, large: 36),
                           fontWeight: FontWeight.w700,
                           color: Theme.of(context).colorScheme.primary,
                           shadows: [
@@ -96,7 +106,8 @@ class _AmbulancePageState extends State<AmbulancePage> {
                 Text(
                   l10n.ambulanceDesc,
                   style: GoogleFonts.mukta(
-                    fontSize: 20,
+                    fontSize: ResponsiveUtils.fontSize(context,
+                        small: 14, medium: 16, large: 20),
                     fontWeight: FontWeight.w400,
                     color: Theme.of(context).colorScheme.secondary,
                   ),

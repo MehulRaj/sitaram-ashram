@@ -6,7 +6,8 @@ import '../widgets/home_footer.dart';
 import '../widgets/background_container.dart';
 
 class ServicesPage extends StatefulWidget {
-  const ServicesPage({super.key});
+  final void Function(String route)? onNav;
+  const ServicesPage({super.key, this.onNav});
 
   @override
   State<ServicesPage> createState() => _ServicesPageState();
@@ -15,17 +16,23 @@ class ServicesPage extends StatefulWidget {
 class _ServicesPageState extends State<ServicesPage> {
   late final AssetImage _bgImage;
   bool _bgReady = false;
+  bool _didPrecache = false;
 
   @override
   void initState() {
     super.initState();
     _bgImage = const AssetImage('assets/images/cow_statue.jpg');
-    _precacheBg();
   }
 
-  void _precacheBg() async {
-    await precacheImage(_bgImage, context);
-    if (mounted) setState(() => _bgReady = true);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didPrecache) {
+      _didPrecache = true;
+      precacheImage(_bgImage, context).then((_) {
+        if (mounted) setState(() => _bgReady = true);
+      });
+    }
   }
 
   @override
@@ -51,7 +58,8 @@ class _ServicesPageState extends State<ServicesPage> {
       {
         'icon': Icons.auto_stories,
         'title': l10n.productsTitle,
-        'desc': '${l10n.productGheeDesc}\n${l10n.productDungDesc}\n${l10n.productUrineDesc}\n${l10n.productCompostDesc}',
+        'desc':
+            '${l10n.productGheeDesc}\n${l10n.productDungDesc}\n${l10n.productUrineDesc}\n${l10n.productCompostDesc}',
       },
       {
         'icon': Icons.photo_library,
